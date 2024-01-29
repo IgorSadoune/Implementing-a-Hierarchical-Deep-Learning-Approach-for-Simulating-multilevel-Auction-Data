@@ -1,0 +1,6 @@
+venv/
+CLEAN_SAVE
+*__pycache__
+data/raw_data.pkl
+data/original_features.pkl
+
