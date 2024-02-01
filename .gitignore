@@ -1,4 +1,4 @@
 venv_1/
 *__pycache__
 data/raw_data.pkl
-
+src/scripts/temp.py
