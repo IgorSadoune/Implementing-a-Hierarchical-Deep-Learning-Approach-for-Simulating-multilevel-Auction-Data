@@ -1,4 +1,11 @@
-"""DataTransformer module."""
+#src/modules/transformer.py
+
+"""
+DataTransformer module. Modified version of the original CTGAN data_transformer.py file: 
+https://github.com/sdv-dev/CTGAN/blob/main/ctgan/data_transformer.py. The main modification 
+is the disentenglement of the transformer class form Base Synthesizer and CTGAN and TVAE classes,
+providing more flexibility.
+"""
 
 from collections import namedtuple
 

@@ -1,25 +1,22 @@
 # src/scripts/data_transform.py
 
 """
-This script preprocesses raw SEAO (Système électronique d'appel d'offres) data to extract relevant features and targets for further analysis, focusing on open public auctions in three sectors: supply, services, and construction.
+This script preprocesses raw SEAO (Système électronique d'appel d'offres) data to extract relevant features 
+and targets for further analysis, focusing on open public auctions in three sectors: supply, services, and construction.
 
 Input:
-'.../data/raw/raw_data.pkl': A pickled DataFrame containing the original raw SEAO data.
+'.../data/raw_data.pkl': A pickled DataFrame containing the raw SEAO data after transformation from xml format.
 
 Output:
-'.../data/processed/data.pkl': A pickled DataFrame containing the preprocessed features and target values (montantsoumis) for each contract.
-
-The script performs the following steps:
-- Load the original raw SEAO data.
-- Filter the data to keep only open public auctions in supply, services, and construction sectors.
-- Drop unnecessary columns from the dataset.
-- Create a binary variable 'post_adjudication_expenses' to indicate if there were any expenses after the auction.
-- Drop rows with null or NaN values.
-- Drop duplicates from the multi-label columns ('nomorganisation' and 'montantsoumis'), and then drop the 'nomorganisation' column.
-- Check for inconsistencies in the number of bids and drop rows with such inconsistencies.
-- Drop contracts with bids less than 25,000 CAD.
-- Rename the columns for better readability.
-- Save the preprocessed features and target values as a pickled file.
+    '../../data/bids.npy': bids in CAD
+    '../../data/standardized_log_bids.npy': standardized logarithmic bids
+    '../../data/average_standardized_log_bids.npy': conditional mean of standardized logarithmic bids (per auction)
+    '../../data/var_standardized_log_bids.npy': conditional variance of standardized logarithmic bids (per auction)
+    '../../data/data.pkl': dataset including auction features and bids 
+    '../../data/features.pkl': auction features only 
+    '../../data/transformed_features.npy': transformed auction features (onehot encoding)
+    '../../data/transformed_features_squeezed.npy': squeezed (one line per auction) transformed auction features (onehot encoding)
+    '../../data/info.pkl': dictionary containing output_info_list, column_transform_info_list, n_bidders and data_dim
 """
 
 from sklearn.preprocessing import StandardScaler
@@ -215,11 +212,11 @@ if __name__=="__main__":
     data.to_pickle(data_path)
     features_path = os.path.join(current_path, '../../data/features.pkl')
     features.to_pickle(features_path)
-    # transformed_features_path = os.path.join(current_path, '../../data/transformed_features.npy')
-    # np.save(transformed_features_path, transformed_features)
-    # transformed_features_squeezed_path = os.path.join(current_path, '../../data/transformed_features_squeezed.npy')
-    # np.save(transformed_features_squeezed_path, transformed_features_squeezed)
+    transformed_features_path = os.path.join(current_path, '../../data/transformed_features.npy')
+    np.save(transformed_features_path, transformed_features)
+    transformed_features_squeezed_path = os.path.join(current_path, '../../data/transformed_features_squeezed.npy')
+    np.save(transformed_features_squeezed_path, transformed_features_squeezed)
 
-    # info_path = os.path.join(current_path, '../../data/info.pkl')
-    # with open(info_path, "wb") as f:
-    #     pickle.dump(info, f)
+    info_path = os.path.join(current_path, '../../data/info.pkl')
+    with open(info_path, "wb") as f:
+        pickle.dump(info, f)

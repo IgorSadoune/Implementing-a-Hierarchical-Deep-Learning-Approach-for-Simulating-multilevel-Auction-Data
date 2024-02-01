@@ -1,4 +1,18 @@
-#src/scripts/regtree.py
+#src/scripts/msvr.py
+
+"""
+This script trains a multi-output support vector machine regression (MSVR) model.
+
+Inputs:
+    ../../data/transformed_features_squeezed.npy
+    ../../data/average_standardized_log_bids.npy
+    ../../data/var_standardized_log_bids.npy
+    ../../data/standardized_log_bids.npy
+
+Outputs:
+        msvr model: '../../models/svr_model.pt'
+            
+"""
 
 import torch
 import numpy as np

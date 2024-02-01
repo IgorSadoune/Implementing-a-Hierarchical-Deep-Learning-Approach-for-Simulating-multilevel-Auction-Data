@@ -1,16 +1,18 @@
 #src/scripts/ctgan_tvae_eval.py
+
 """
-This script trains and evaluates several classifiers on synthetic and real data.
+This script trains three classifiers (K-NN, classification Tree and classification MLP) on synthetic data, 
+and evaluates them on real data, in order to generate inception scores.
 
-The script defines two main functions: 
-- `data_prep`, which prepares the data for classification by extracting a target variable 
-  and removing its corresponding columns.
-- `inception_score`, which trains and evaluates several classifiers on the prepared data, 
-  and prints classification reports.
+Inputs:
+    ../../data/transformed_features_squeezed.npy
+    '../../data/synthetic_data_ctgan.npy'
+    '../../data/synthetic_data_tvae.npy'
+    ../../data/info.pkl
 
-This script is intended to be run as a standalone script and requires several files that 
-contain the real and synthetic data as well as a file with information about the output 
-variables. These files should be located in the directories specified within the script.
+Outputs:
+
+    inception metrics: three classification reports.
 """
 
 from sklearn.metrics import classification_report
@@ -32,16 +34,16 @@ def data_prep(real_data, synthetic_data, output_info_list, variable_index):
     Prepares data for classification by extracting a target variable and removing its corresponding columns.
 
     Parameters:
-    real_data (np.ndarray): The real data to prepare.
-    synthetic_data (np.ndarray): The synthetic data to prepare.
-    output_info_list (list): A list of information about the output variables.
-    variable_index (int): The index of the target variable in the output_info_list.
+        real_data (np.ndarray): The real data to prepare.
+        synthetic_data (np.ndarray): The synthetic data to prepare.
+        output_info_list (list): A list of information about the output variables.
+        variable_index (int): The index of the target variable in the output_info_list.
 
     Returns:
-    train_data (np.ndarray): The prepared synthetic data.
-    test_data (np.ndarray): The prepared real data.
-    train_target (np.array): The target variable extracted from the synthetic data.
-    test_target (np.array): The target variable extracted from the real data.
+        train_data (np.ndarray): The prepared synthetic data.
+        test_data (np.ndarray): The prepared real data.
+        train_target (np.array): The target variable extracted from the synthetic data.
+        test_target (np.array): The target variable extracted from the real data.
     """
     # Calculate the start and end indices for slicing
     start_idx = sum(info[0].dim for info in output_info_list[:variable_index])
@@ -62,10 +64,10 @@ def inception_score(train_data, test_data, train_target, test_target):
     Trains and evaluates several classifiers on the prepared data, and prints classification reports.
 
     Parameters:
-    train_data (np.ndarray): The synthetic data to train the classifiers on.
-    test_data (np.ndarray): The real data to test the classifiers on.
-    train_target (np.array): The target variable for the synthetic data.
-    test_target (np.array): The target variable for the real data.
+        train_data (np.ndarray): The synthetic data to train the classifiers on.
+        test_data (np.ndarray): The real data to test the classifiers on.
+        train_target (np.array): The target variable for the synthetic data.
+        test_target (np.array): The target variable for the real data.
     """
     # Init classifiers
     names = [
@@ -95,7 +97,7 @@ if __name__=="__main__":
 
     # Paths
     current_path = os.path.dirname(os.path.abspath(__file__))
-    features_squeezed_path = os.path.join(current_path, '../../data/features_squeezed.npy')
+    features_squeezed_path = os.path.join(current_path, '../../data/transformed_features_squeezed.npy')
     synthetic_data_ctgan_path = os.path.join(current_path, '../../data/synthetic_data_ctgan.npy')
     synthetic_data_tvae_path = os.path.join(current_path, '../../data/synthetic_data_tvae.npy')
     info_path = os.path.join(current_path, '../../data/info.pkl')

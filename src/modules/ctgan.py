@@ -1,4 +1,10 @@
-"""CTGAN module."""
+#src/modules/ctgan.py
+
+"""
+CTGAN module. Customized version of the CTGAN class, inspired by the original CTGAN class implementation:
+https://github.com/sdv-dev/CTGAN/blob/main/ctgan/synthesizers/ctgan.py. Modifications involve mainly the structure of the class
+to best fit the needs of our study, as well as customized random state management.
+"""
 
 import warnings
 
@@ -138,12 +144,6 @@ class Generator(Module):
 
 class CTGAN(object):
     """Conditional Table GAN Synthesizer.
-
-    This is the core class of the CTGAN project, where the different components
-    are orchestrated together.
-    For more details about the process, please check the [Modeling Tabular data using
-    Conditional GAN](https://arxiv.org/abs/1907.00503) paper.
-
     Args:
         embedding_dim (int):
             Size of the random sample passed to the Generator. Defaults to 128.

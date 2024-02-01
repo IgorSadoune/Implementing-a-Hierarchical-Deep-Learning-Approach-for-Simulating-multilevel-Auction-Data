@@ -1,6 +1,29 @@
 # src/scripts/training_bidnet.py
+
 """
-Script for training the BidNet neural networks using cross-validation and early stopping.
+This script 
+    1) trains the BidNet using K-fold cross-validation and early stopping
+    2) uses trained BidNet parameters to predict synthetic bids from real and synthetic features
+
+Inputs:
+    ../../data/transformed_features.npy
+    ../../data/transformed_features_squeezed.npy
+    ../../data/standardized_log_bids.npy
+    ../../data/info.pkl
+    '../../data/synthetic_data_ctgan.npy'
+    '../../data/synthetic_data_tvae.npy'
+
+Outputs:
+        data:
+            'b_hat': Predicted bids from real features 
+            'b_tilde_ctgan': Predicted bids from synthetic features (CTGAN)
+            'b_tilde_tvae': Predicted bids from synthetic features (TVAE)
+
+        models:
+            bidnet model: '../../models/bidnet_model.pkl'
+            
+        losses:
+            bidnet losses: '../../data/bidnet_losses.pkl'
 """
 
 import os

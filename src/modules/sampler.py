@@ -1,4 +1,9 @@
-"""DataSampler module."""
+#src/modules/sampler.py
+
+"""
+DataSampler module. Modified version of the original CTGAN data_sampler.py file: 
+https://github.com/sdv-dev/CTGAN/blob/main/ctgan/data_sampler.py.
+"""
 
 import numpy as np
 

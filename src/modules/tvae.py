@@ -1,4 +1,10 @@
-"""TVAE module."""
+#src/modules/tvae.py
+
+"""
+TVAE module. Customized version of the CTGAN class, inspired by the original CTGAN class implementation:
+https://github.com/sdv-dev/CTGAN/blob/main/ctgan/synthesizers/tvae.py. Modifications involve mainly the structure of the class
+to best fit the needs of our study, as well as customized random state management.
+"""
 
 import numpy as np
 import pandas as pd

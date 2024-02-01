@@ -1,5 +1,18 @@
 #src/scripts/regtree.py
 
+"""
+This script trains a multi-output regression tree (regtree) model.
+
+Inputs:
+    ../../data/transformed_features_squeezed.npy
+    ../../data/average_standardized_log_bids.npy
+    ../../data/var_standardized_log_bids.npy
+    ../../data/standardized_log_bids.npy
+
+Outputs:
+        reg tree model: '../../models/regtree_model.pt'
+"""
+
 import torch
 import numpy as np
 from tqdm import tqdm

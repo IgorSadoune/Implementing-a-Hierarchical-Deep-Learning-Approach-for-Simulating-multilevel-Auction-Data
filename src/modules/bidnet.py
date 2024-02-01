@@ -1,7 +1,7 @@
-# src/modules/Bidnet.py
+#src/modules/Bidnet.py
 
 """
-Module for the BidNet neural network.
+BidNet network and class agent.
 """
 
 import torch
@@ -133,9 +133,7 @@ class BidNetAgent(object):
 
 	Args:
 		hidden_dim (list): A list of hidden layer dimensions.
-		embedding_sizes (list): A list of tuples containing the number of unique values and the embedding dimension for each categorical feature.
 		output_info_list (list): A list of tuples containing the name of the output and the number of unique values for each categorical output.
-		n_cont (int): The number of continuous features.
 		input_dim (int): The number of input features.
 		xavier (bool): Indicates if the network uses xavier initialization.
 		normalize (bool): Indicates if the network uses batch normalization.
@@ -149,6 +147,8 @@ class BidNetAgent(object):
 		verbose (bool): Indicates if the training progress is printed.
 		cuda (bool): Indicates if CUDA is used for training.
 		model_path (str): The path to the model file.     
+		seed (int): Random state seed.     
+		save_model (bool): Flag to save model parameters and losses.     
 
 	Methods:
 		fit: Fits the model to the training data.
@@ -254,7 +254,7 @@ class BidNetAgent(object):
 
 	def _reset_weights(self, m):
 		"""
-		Resetting model weights to avoid weight leakage.
+		Resetting model weights to avoid weight leakage in K-fold cross validation context.
 		"""
 		for layer in m.children():
 			if hasattr(layer, 'reset_parameters'):
@@ -438,7 +438,6 @@ class BidNetAgent(object):
 		
 		Args:
 			model_path (str): path to load the model. Must be a full path that includes filename and extension.
-			embedding_sizes (list) (optional): A list of tuples containing the number of unique values and the embedding dimension for each categorical feature.
 		"""
 		self._model.load_state_dict(torch.load(model_path))
 		self._model.eval()

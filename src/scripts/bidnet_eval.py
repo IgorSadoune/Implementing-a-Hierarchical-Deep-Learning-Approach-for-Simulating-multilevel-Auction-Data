@@ -1,42 +1,29 @@
 #src/scripts/bidnet_eval.py
 
+"""
+This script measures probability distributions distances based on quantile-to-quantile root mean squared error (QQRMSE) and 
+earth mover distance (EMD, aslo called Wasserstein distance).
+
+Inputs:
+    '../../data/average_standardized_log_bids.npy'
+    '../../data/b_hat.npy'
+    '../../data/b_tilde_ctgan.npy'
+    '../../data/b_tilde_tvae.npy'
+
+Outputs:
+	QQ-RMSE: b_hat vs standardized_log_bids, b_hat vs b_tilde_ctgan, b_hat vs b_tilde_tvae, b_tilde_ctgan vs b, b_tilde_tvae vs b
+	EMD: b_hat vs standardized_log_bids, b_hat vs b_tilde_ctgan, b_hat vs b_tilde_tvae, b_tilde_ctgan vs b, b_tilde_tvae vs b
+"""
+
 from sklearn.metrics import mean_squared_error
 from scipy.stats import wasserstein_distance
 from scipy.stats import norm
 import numpy as np
 import os
-import collections
-from math import log2
-
-def flatten(
-	listOfElems
-	) -> object:
-	'''
-	Flatten multi-level nested iterables. Use list(flatten(yourlist)).
-	
-	Output:
-		A flat object (use list(object) in order to transcript in a list)
-	'''
-
-	for _ in listOfElems:
-		if isinstance(
-			_,
-			collections.Iterable
-			) and not isinstance(
-			_,
-			(str, bytes)
-			):
-			yield from flatten(_)
-		else:
-			yield _
-
-def kl_divergence(p, q):
-    '''
-    '''
-    return sum(p[i] * log2((p[i]/q[i]) + 1e-5) for i in range(len(p)))
 
 def get_metrics(pred, target):
 	'''
+	Computes QQ-RMSE and EMD metrics between prediction and target.
 	'''
 	if type(target) is list:
 		target = np.array(target)
@@ -50,9 +37,7 @@ if __name__=="__main__":
 
 	# Load data
 	current_path = os.path.dirname(os.path.abspath(__file__))
-	real_data_path = os.path.join(current_path, '../../data/transformed_features.npy')
 	standardized_log_average_bids_path = os.path.join(current_path, '../../data/average_standardized_log_bids.npy')
-	real_data = np.load(real_data_path)
 	standardized_log_average_bids = np.load(standardized_log_average_bids_path)
 
 	# Load synthetic bids
