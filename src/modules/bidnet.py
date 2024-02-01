@@ -133,6 +133,9 @@ class BidNetAgent(object):
 
 	Args:
 		hidden_dim (list): A list of hidden layer dimensions.
+		embedding_sizes (list): A list of tuples containing the number of unique values and the embedding dimension for each categorical feature.
+		output_info_list (list): A list of tuples containing the name of the output and the number of unique values for each categorical output.
+		n_cont (int): The number of continuous features.
 		input_dim (int): The number of input features.
 		xavier (bool): Indicates if the network uses xavier initialization.
 		normalize (bool): Indicates if the network uses batch normalization.
@@ -164,9 +167,9 @@ class BidNetAgent(object):
 				dropout=True,
 				k_folds=5,
 				batch_size=32,
-				learning_rate=1e-3,
-				max_epochs=100,
-				min_epochs=5,
+				learning_rate=2e-4,
+				max_epoch=100,
+				min_epoch=5,
 				patience=10,
 				verbose=True,
 				cuda=True,
@@ -183,8 +186,8 @@ class BidNetAgent(object):
 		self.xavier=xavier
 		self.normalize=normalize
 		self.dropout=dropout
-		self.min_epochs=min_epochs
-		self.max_epochs=max_epochs
+		self.min_epoch=min_epoch
+		self.max_epoch=max_epoch
 		self.patience=patience
 		self.k_folds=k_folds
 		self.batch_size=batch_size
@@ -194,12 +197,12 @@ class BidNetAgent(object):
 		self.save_model=save_model
 
 		assert (self.k_folds > 1), "k_folds must be greater than 1."
-		assert (self.max_epochs > 0), "max_epochs must be greater than 1."
-		assert (self.min_epochs > 0), "min_epochs must be greater than 1."
+		assert (self.max_epoch > 0), "max_epochs must be greater than 1."
+		assert (self.min_epoch > 0), "min_epochs must be greater than 1."
 		assert (self.patience > 0), "patience must be greater than 1."
-		assert (self.patience < self.max_epochs), "patience must be less than max_epochs."
-		assert (self.min_epochs < self.max_epochs), "min_epochs must be less than max_epochs."
-		assert (self.min_epochs < self.patience), "min_epochs must be less than patience."
+		assert (self.patience < self.max_epoch), "patience must be less than max_epochs."
+		assert (self.min_epoch < self.max_epoch), "min_epochs must be less than max_epochs."
+		assert (self.min_epoch < self.patience), "min_epochs must be less than patience."
 		assert (batch_size % 2 == 0), "batch_size must be an even number."
 		assert (model_path is None or isinstance(model_path, str)), "model_path must be a string."
 
@@ -224,7 +227,6 @@ class BidNetAgent(object):
 							normalize=self.normalize, 
 							dropout=self.dropout,
 							seed=self.random_state).to(self._device)
-
 
 	def _set_random_state(self):
 		if self.random_state is not None:
@@ -256,7 +258,8 @@ class BidNetAgent(object):
 		"""
 		for layer in m.children():
 			if hasattr(layer, 'reset_parameters'):
-				print(f'Reset trainable parameters of layer = {layer}')
+				if self.verbose:
+					print(f'Reset trainable parameters of layer = {layer}')
 				layer.reset_parameters()
 
 	def fit(self, input_data, target_data):
@@ -374,12 +377,12 @@ class BidNetAgent(object):
 				self._best_fold[fold] = np.min(val_loss_)
 
 				# Early stopping
-				if epoch > self.max_epochs - 1:#security
+				if epoch > self.max_epoch - 1:#security
 					converged=True
 					
 				else:
 					converged = self._early_stopping(epoch, val_loss_, 
-														min_epoch=self.min_epochs, 
+														min_epoch=self.min_epoch, 
 														patience=self.patience)
 				
 			# Record stop epoch    

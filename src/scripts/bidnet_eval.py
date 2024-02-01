@@ -46,26 +46,28 @@ def get_metrics(pred, target):
 	ws = wasserstein_distance(p, q)
 	return rmse, ws
 
-# Load data
-current_path = os.path.dirname(os.path.abspath(__file__))
-real_data_path = os.path.join(current_path, '../../data/features.npy')
-standardized_log_average_bids_path = os.path.join(current_path, '../../data/standardized_log_average_bids.npy')
-real_data = np.load(real_data_path)
-standardized_log_average_bids = np.load(standardized_log_average_bids_path)
+if __name__=="__main__":
 
-# Load synthetic bids
-synthetic_bids = {}
-for synthetic_bid in ['b_hat', 'b_tilde_ctgan', 'b_tilde_tvae']:
-    synthetic_bids[synthetic_bid] = np.load(os.path.join(current_path, f'../../data/{synthetic_bid}' + '.npy'))
+	# Load data
+	current_path = os.path.dirname(os.path.abspath(__file__))
+	real_data_path = os.path.join(current_path, '../../data/transformed_features.npy')
+	standardized_log_average_bids_path = os.path.join(current_path, '../../data/average_standardized_log_bids.npy')
+	real_data = np.load(real_data_path)
+	standardized_log_average_bids = np.load(standardized_log_average_bids_path)
 
-# Metrics
-rmse, ws = {}, {}
-rmse['b_hat_vs_b'], ws['b_hat_vs_b'] = get_metrics(synthetic_bids['b_hat'], standardized_log_average_bids)
-rmse['b_hat_vs_b_tilde_ctgan'], ws['b_hat_vs_btilde_ctgan'] = get_metrics(synthetic_bids['b_hat'], synthetic_bids['b_tilde_ctgan'])
-rmse['b_hat_vs_b_tilde_tvae'], ws['b_hat_vs_btilde_tvae'] = get_metrics(synthetic_bids['b_hat'], synthetic_bids['b_tilde_tvae'])
-rmse['b_tilde_ctagn_vs_b'], ws['b_tilde_ctagn_vs_b'] = get_metrics(synthetic_bids['b_tilde_ctgan'], standardized_log_average_bids)
-rmse['b_tilde_tvae_vs_b'], ws['b_tilde_tvae_vs_b'] = get_metrics(synthetic_bids['b_tilde_tvae'], standardized_log_average_bids)
+	# Load synthetic bids
+	synthetic_bids = {}
+	for synthetic_bid in ['b_hat', 'b_tilde_ctgan', 'b_tilde_tvae']:
+		synthetic_bids[synthetic_bid] = np.load(os.path.join(current_path, f'../../data/{synthetic_bid}' + '.npy'))
+		
+	# Metrics
+	rmse, ws = {}, {}
+	rmse['b_hat_vs_b'], ws['b_hat_vs_b'] = get_metrics(synthetic_bids['b_hat'], standardized_log_average_bids)
+	rmse['b_hat_vs_b_tilde_ctgan'], ws['b_hat_vs_btilde_ctgan'] = get_metrics(synthetic_bids['b_hat'], synthetic_bids['b_tilde_ctgan'])
+	rmse['b_hat_vs_b_tilde_tvae'], ws['b_hat_vs_btilde_tvae'] = get_metrics(synthetic_bids['b_hat'], synthetic_bids['b_tilde_tvae'])
+	rmse['b_tilde_ctagn_vs_b'], ws['b_tilde_ctagn_vs_b'] = get_metrics(synthetic_bids['b_tilde_ctgan'], standardized_log_average_bids)
+	rmse['b_tilde_tvae_vs_b'], ws['b_tilde_tvae_vs_b'] = get_metrics(synthetic_bids['b_tilde_tvae'], standardized_log_average_bids)
 
-# Results
-print('RMSE:', rmse)
-print('WS:', ws)
+	# Results
+	print('RMSE:', rmse)
+	print('WS:', ws)

@@ -28,6 +28,7 @@ import pickle
 import numpy as np
 import os
 import sys
+import argparse
 sys.path.append(os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'modules'))
 from transformer import DataTransformer
 
@@ -134,75 +135,91 @@ def clean_data(df):
     'montantsoumis':'bids'
     }
     df = df.rename(columns=col_map)
-    # Isolate bids
-    df.bids = pd.to_numeric(df.bids)
-    bids = df.bids
-    average_bids = df.groupby(df.index)['bids'].mean()
-    features = df.drop('bids', axis=1)
-    # Remove duplicates in features
-    compact_size = np.unique(features.index).shape[0]
-    features['index'] = features.index
-    features_squeezed = features.drop_duplicates(subset='index')
-    features = features.drop('index', axis=1)
-    features_squeezed = features_squeezed.drop('index', axis=1)
-    assert features_squeezed.shape[0] == compact_size, "Wrong size in dimension 0"
     # Remove weak category signals
     threshold = 5
-    for column in features_squeezed.columns:
-        category_counts = features_squeezed[column].value_counts()
-        weak_categories = category_counts[category_counts < threshold].index.tolist()
-        features[column] = features[column].replace(weak_categories, '1e5')
-        features_squeezed[column] = features_squeezed[column].replace(weak_categories, '1e5')
-    return features, features_squeezed, bids, average_bids
+    for column in df.columns:
+        if column != 'bids':
+            category_counts = df[column].value_counts()
+            weak_categories = category_counts[category_counts < threshold].index.tolist()
+            df[column] = df[column].replace(weak_categories, '1e5')
+    return df
 
-# Load raw SEAO data
-current_path = os.path.abspath(os.path.dirname(__file__))
-data_file_path = os.path.join(current_path, '..', '..', 'data', 'raw_data.pkl')
-data = pd.read_pickle(data_file_path)
+if __name__=="__main__":
 
-# Clean the data and extract n_bidders
-features, features_squeezed, bids, average_bids = clean_data(data)
-original_features = features
-n_bidders = np.array(pd.to_numeric(features_squeezed.n_bidders)).reshape(-1,1)
-data_index = list(features.index)
+    # Parser for test size data
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--test", action='store_true', help="Use a small amount of data for test.")
+    args = parser.parse_args()
 
-# Transform bids
-scaler = StandardScaler()
-log_bids = np.array(np.log(bids)).reshape(-1,1)
-log_average_bids = np.array(np.log(average_bids)).reshape(-1,1)
-standardized_log_bids = scaler.fit_transform(log_bids)
-standardized_log_average_bids = scaler.fit_transform(log_average_bids)
+    # Load raw SEAO data
+    current_path = os.path.abspath(os.path.dirname(__file__))
+    data_file_path = os.path.join(current_path, '..', '..', 'data', 'raw_data.pkl')
+    data = pd.read_pickle(data_file_path)
+    if args.test:
+        size = 1000
+    else:
+        size = data.shape[0]
 
-# Transform features
-discrete_columns = list(features.columns)
-transformer = DataTransformer(seed=42) 
-transformer.fit(features, discrete_columns)
-features = transformer.transform(features)
-transformer.fit(features_squeezed, discrete_columns)
-features_squeezed = transformer.transform(features_squeezed)
+    # Clean the data and extract n_bidders
+    data = clean_data(data[:size])
 
-# Info
-info = {
-    'output_info_list': transformer.output_info_list,
-    'column_transform_info_list': transformer.column_transform_info_list,
-    'data_dim': transformer.output_dimensions,
-    'data_index': data_index,
-    'n_bidders': n_bidders
-}
+    # Isolate features from bids
+    bids = pd.to_numeric(data.bids)
+    features = data.drop('bids', axis=1)
+    
+    # Transform bids
+    bids = np.array(bids).reshape(-1,1)
+    scaler = StandardScaler()
+    standardized_log_bids = scaler.fit_transform(np.log(bids))
 
-# Save data
-current_path = os.path.abspath(os.path.dirname(__file__))
-original_features_path = os.path.join(current_path, '../../data/original_features.pkl')
-features_path = os.path.join(current_path, '../../data/features.npy')
-features_squeezed_path = os.path.join(current_path, '../../data/features_squeezed.npy')
-features_inception_score_path = os.path.join(current_path, '../../data/features_inception_score.npy')
-standardized_log_bids_path = os.path.join(current_path, '../../data/standardized_log_bids.npy')
-standardized_log_average_bids_path = os.path.join(current_path, '../../data/standardized_log_average_bids.npy')
-info_path = os.path.join(current_path, '../../data/info.pkl')
-original_features.to_pickle(original_features_path)
-np.save(features_path, features)
-np.save(features_squeezed_path, features_squeezed)
-np.save(standardized_log_bids_path, standardized_log_bids)
-np.save(standardized_log_average_bids_path, standardized_log_average_bids)
-with open(info_path, "wb") as f:
-    pickle.dump(info, f)
+    # Get mu and sigma for multi-output regtree and svr
+    temp = pd.DataFrame(standardized_log_bids)
+    temp.index = data.index
+    average_standardized_log_bids = temp.groupby(temp.index).mean()
+    var_standardized_log_bids = temp.groupby(temp.index).var().fillna(0)
+    del temp
+
+    # Transform features
+    discrete_columns = list(features.columns)
+    transformer = DataTransformer(seed=42) 
+    transformer.fit(features, discrete_columns)
+    transformed_features = transformer.transform(features)
+    
+    # Remove duplicates in features
+    compact_size = np.unique(features.index).shape[0]
+    transformed_features_squeezed = pd.DataFrame(transformed_features)
+    transformed_features_squeezed.index = data.index
+    transformed_features_squeezed.drop_duplicates(subset=transformed_features_squeezed.index, keep='first', inplace=True)
+    assert transformed_features_squeezed.shape[0] == compact_size, "Wrong size in dimension 0"
+
+    # Info
+    n_bidders = np.array(pd.to_numeric(transformed_features_squeezed.n_bidders)).reshape(-1,1)
+    info = {
+        'output_info_list': transformer.output_info_list,
+        'column_transform_info_list': transformer.column_transform_info_list,
+        'data_dim': transformer.output_dimensions,
+        'n_bidders': n_bidders
+    }
+
+    # Save data
+    bids_path = os.path.join(current_path, '../../data/bids.npy')
+    np.save(bids_path, bids)
+    standardized_log_bids_path = os.path.join(current_path, '../../data/standardized_log_bids.npy')
+    np.save(standardized_log_bids_path, standardized_log_bids)
+    average_standardized_log_bids_path = os.path.join(current_path, '../../data/average_standardized_log_bids.npy')
+    np.save(average_standardized_log_bids_path, average_standardized_log_bids)
+    var_standardized_log_bids_path = os.path.join(current_path, '../../data/var_standardized_log_bids.npy')
+    np.save(var_standardized_log_bids_path, var_standardized_log_bids)
+
+    data_path = os.path.join(current_path, '../../data/data.pkl')
+    data.to_pickle(data_path)
+    features_path = os.path.join(current_path, '../../data/features.pkl')
+    features.to_pickle(features_path)
+    # transformed_features_path = os.path.join(current_path, '../../data/transformed_features.npy')
+    # np.save(transformed_features_path, transformed_features)
+    # transformed_features_squeezed_path = os.path.join(current_path, '../../data/transformed_features_squeezed.npy')
+    # np.save(transformed_features_squeezed_path, transformed_features_squeezed)
+
+    # info_path = os.path.join(current_path, '../../data/info.pkl')
+    # with open(info_path, "wb") as f:
+    #     pickle.dump(info, f)

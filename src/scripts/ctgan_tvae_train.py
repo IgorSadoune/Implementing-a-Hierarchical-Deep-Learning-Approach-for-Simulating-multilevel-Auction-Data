@@ -37,7 +37,7 @@ def train_ctgan(
         """
         train_ctgan trains a CTGAN model on the transformed data and saves the trained model and the generated synthetic data.
         """
-        save_model = args_dict.get('save_model')
+        # Init model
         model = CTGAN(
                 output_info_list=output_info_list, 
                 embedding_dim=args_dict['ctgan_embedding_dim'],
@@ -58,16 +58,17 @@ def train_ctgan(
                 )
         # Fit
         model.fit(train_data=train_data, data_dim=data_dim)
-        if save_model:
+        # Generate synthetic data
+        synthetic_data = model.sample(sample_size)
+        # Save model parameters, losses and synthetic samples
+        if args_dict['save_model']:
                 # Save generator and critic losses
                 losses = model.loss_values
                 losses.to_pickle(losses_path)
                 # Save CTGAN model
                 model.save(model_path)
-        # Generate synthetic data
-        synthetic_data = model.sample(sample_size)
-        # Save synthetic data
-        np.save(synthetic_data_path, synthetic_data)
+                # Save synthetic data
+                np.save(synthetic_data_path, synthetic_data)
         return synthetic_data
 
 # Train TVAE model
@@ -85,7 +86,6 @@ def train_tvae(
         """
         train_tvae trains a TVAE model on the transformed data and saves the trained model and the generated synthetic data.
         """
-        save_model = args_dict.get('save_model')
         model = TVAE(
                 output_info_list=output_info_list,
                 embedding_dim=args_dict.get('tvae_embedding_dim'),
@@ -100,98 +100,98 @@ def train_tvae(
                 )
         # Fit
         model.fit(train_data=train_data, data_dim=data_dim)
-        if save_model:
-                # Save TVAE losses
-                losses = model.loss_values
-                losses.to_pickle(losses_path)
-                # Save TVAE model
-                model.save(model_path)
         # Generate synthetic data
         synthetic_data, sigmas = model.sample(sample_size)
-        # Save synthetic data
-        np.save(synthetic_data_path, synthetic_data)
-        np.save(tvae_sigmas_path, sigmas)
+        # Save model parameters, losses and synthetic samples
+        if args_dict['save_model']:
+                losses = model.loss_values
+                losses.to_pickle(losses_path)
+                model.save(model_path)
+                np.save(synthetic_data_path, synthetic_data)
+                np.save(tvae_sigmas_path, sigmas)
         return synthetic_data
 
-parser = argparse.ArgumentParser(description="Train synthetic data generators CTGAN and TVAE with custom hyperparameters.")
+if __name__=="__main__":
 
-# CTGAN hyperparameters
-parser.add_argument("--ctgan_embedding_dim", type=int, default=128, help="CTGAN embedding dimension.")
-parser.add_argument("--ctgan_generator_dim", nargs=2, type=int, default=(256, 256), help="CTGAN generator dimensions.")
-parser.add_argument("--ctgan_discriminator_dim", nargs=2, type=int, default=(256, 256), help="CTGAN discriminator dimensions.")
-parser.add_argument("--ctgan_generator_lr", type=float, default=2e-4, help="CTGAN generator learning rate.")
-parser.add_argument("--ctgan_generator_decay", type=float, default=1e-6, help="CTGAN generator weight decay.")
-parser.add_argument("--ctgan_discriminator_lr", type=float, default=2e-4, help="CTGAN discriminator learning rate.")
-parser.add_argument("--ctgan_discriminator_decay", type=float, default=1e-6, help="CTGAN discriminator weight decay.")
-parser.add_argument("--ctgan_batch_size", type=int, default=500, help="CTGAN batch size.")
-parser.add_argument("--ctgan_discriminator_steps", type=int, default=1, help="CTGAN number of discriminator steps.")
-parser.add_argument("--ctgan_epochs", type=int, default=100, help="CTGAN number of epochs.")
-parser.add_argument("--ctgan_pac", type=int, default=10, help="CTGAN privacy amplification factor.")
-parser.add_argument("--log_frequency", action="store_false", help="Log training progress at each epoch.")
-parser.add_argument("--verbose", action="store_true", help="Display detailed training progress information.")
+        parser = argparse.ArgumentParser(description="Train synthetic data generators CTGAN and TVAE with custom hyperparameters.")
 
-# TVAE hyperparameters
-parser.add_argument("--tvae_embedding_dim", type=int, default=128, help="TVAE embedding dimension.")
-parser.add_argument("--tvae_compress_dims", nargs=2, type=int, default=(128, 128), help="TVAE compress dimensions.")
-parser.add_argument("--tvae_decompress_dims", nargs=2, type=int, default=(128, 128), help="TVAE decompress dimensions.")
-parser.add_argument("--tvae_l2scale", type=float, default=1e-5, help="TVAE L2 regularization scale.")
-parser.add_argument("--tvae_batch_size", type=int, default=500, help="TVAE batch size.")
-parser.add_argument("--tvae_epochs", type=int, default=300, help="TVAE number of epochs.")
-parser.add_argument("--tvae_loss_factor", type=float, default=2, help="TVAE loss factor.")
+        # CTGAN hyperparameters
+        parser.add_argument("--ctgan_embedding_dim", type=int, default=128, help="CTGAN embedding dimension.")
+        parser.add_argument("--ctgan_generator_dim", nargs=2, type=int, default=(256, 256), help="CTGAN generator dimensions.")
+        parser.add_argument("--ctgan_discriminator_dim", nargs=2, type=int, default=(256, 256), help="CTGAN discriminator dimensions.")
+        parser.add_argument("--ctgan_generator_lr", type=float, default=2e-4, help="CTGAN generator learning rate.")
+        parser.add_argument("--ctgan_generator_decay", type=float, default=1e-6, help="CTGAN generator weight decay.")
+        parser.add_argument("--ctgan_discriminator_lr", type=float, default=2e-4, help="CTGAN discriminator learning rate.")
+        parser.add_argument("--ctgan_discriminator_decay", type=float, default=1e-6, help="CTGAN discriminator weight decay.")
+        parser.add_argument("--ctgan_batch_size", type=int, default=500, help="CTGAN batch size.")
+        parser.add_argument("--ctgan_discriminator_steps", type=int, default=1, help="CTGAN number of discriminator steps.")
+        parser.add_argument("--ctgan_epochs", type=int, default=100, help="CTGAN number of epochs.")
+        parser.add_argument("--ctgan_pac", type=int, default=10, help="CTGAN privacy amplification factor.")
+        parser.add_argument("--log_frequency", action="store_false", help="Log training progress at each epoch.")
+        parser.add_argument("--verbose", action="store_true", help="Display detailed training progress information.")
 
-# GPU usage and seeding
-parser.add_argument("--save_model", action="store_true", help="Save the models.")
-parser.add_argument("--cuda", action="store_true", help="Use GPU if available.")
-parser.add_argument("--seed", type=int, default=42, help="Seed.")
+        # TVAE hyperparameters
+        parser.add_argument("--tvae_embedding_dim", type=int, default=128, help="TVAE embedding dimension.")
+        parser.add_argument("--tvae_compress_dims", nargs=2, type=int, default=(128, 128), help="TVAE compress dimensions.")
+        parser.add_argument("--tvae_decompress_dims", nargs=2, type=int, default=(128, 128), help="TVAE decompress dimensions.")
+        parser.add_argument("--tvae_l2scale", type=float, default=1e-5, help="TVAE L2 regularization scale.")
+        parser.add_argument("--tvae_batch_size", type=int, default=500, help="TVAE batch size.")
+        parser.add_argument("--tvae_epochs", type=int, default=300, help="TVAE number of epochs.")
+        parser.add_argument("--tvae_loss_factor", type=float, default=2, help="TVAE loss factor.")
 
-args = parser.parse_args()
+        # GPU usage and seeding
+        parser.add_argument("--save_model", action="store_true", help="Save model parameters in 'models' folder.")
+        parser.add_argument("--cuda", type=bool, default=True, help="Use GPU if available.")
+        parser.add_argument("--seed", type=int, default=42, help="Seed.")
 
-# Convert the argparse.Namespace object to a dictionary
-args_dict= vars(args)
+        args = parser.parse_args()
 
-# Paths
-current_path = os.path.dirname(os.path.abspath(__file__))
-ctgan_model_path = os.path.join(current_path, '../../models/ctgan_model.pkl')
-ctgan_losses_path = os.path.join(current_path, '../../data/ctgan_losses.pkl')
-tvae_model_path = os.path.join(current_path, '../../models/tvae_model.pkl')
-tvae_losses_path = os.path.join(current_path, '../../data/tave_losses.pkl')
-features_squeezed_path = os.path.join(current_path, '../../data/features_squeezed.npy')
-info_path = os.path.join(current_path, '../../data/info.pkl')
-ctgan_synthetic_data_path = os.path.join(current_path, '../../data/synthetic_data_ctgan.npy')
-tvae_synthetic_data_path = os.path.join(current_path, '../../data/synthetic_data_tvae.npy')
-tvae_sigmas_path = os.path.join(current_path, '../../data/tvae_sigmas_path.npy')
+        # Convert the argparse.Namespace object to a dictionary
+        args_dict= vars(args)
 
-# Load features
-features_squeezed = np.load(features_squeezed_path)
-with open(info_path, 'rb') as f:
-        info = pickle.load(f)
-output_dimensions = info['data_dim']
-output_info_list = info['output_info_list']
-sample_size = features_squeezed.shape[0]
+        # Paths
+        current_path = os.path.dirname(os.path.abspath(__file__))
+        ctgan_model_path = os.path.join(current_path, '../../models/ctgan_model.pkl')
+        ctgan_losses_path = os.path.join(current_path, '../../data/ctgan_losses.pkl')
+        tvae_model_path = os.path.join(current_path, '../../models/tvae_model.pkl')
+        tvae_losses_path = os.path.join(current_path, '../../data/tave_losses.pkl')
+        transformed_features_squeezed_path = os.path.join(current_path, '../../data/transformed_features_squeezed.npy')
+        info_path = os.path.join(current_path, '../../data/info.pkl')
+        ctgan_synthetic_data_path = os.path.join(current_path, '../../data/synthetic_data_ctgan.npy')
+        tvae_synthetic_data_path = os.path.join(current_path, '../../data/synthetic_data_tvae.npy')
+        tvae_sigmas_path = os.path.join(current_path, '../../data/tvae_sigmas_path.npy')
 
-# Train and save CTGAN model
-print('TRAINING CTGAN MODEL...')
-synthetic_data_ctgan = train_ctgan(         
-        args_dict=args_dict,
-        train_data=features_squeezed,
-        data_dim=output_dimensions,
-        output_info_list=output_info_list, 
-        model_path=ctgan_model_path,
-        losses_path=ctgan_losses_path,
-        synthetic_data_path=ctgan_synthetic_data_path,
-        sample_size=sample_size
-        )
+        # Load features
+        transformed_features_squeezed = np.load(transformed_features_squeezed_path)
+        with open(info_path, 'rb') as f:
+                info = pickle.load(f)
+        output_dimensions = info['data_dim']
+        output_info_list = info['output_info_list']
+        sample_size = transformed_features_squeezed.shape[0]
 
-# Train and save TVAE model
-print('TRAINING TVAE MODEL...')
-synthetic_data_tvae = train_tvae(
-        args_dict=args_dict,
-        train_data=features_squeezed,
-        data_dim=output_dimensions,
-        output_info_list=output_info_list,
-        model_path=tvae_model_path,
-        losses_path=tvae_losses_path,
-        synthetic_data_path=tvae_synthetic_data_path,
-        tvae_sigmas_path=tvae_sigmas_path,
-        sample_size=sample_size
-        )
+        # Train and save CTGAN model
+        print('TRAINING CTGAN MODEL...')
+        synthetic_data_ctgan = train_ctgan(         
+                args_dict=args_dict,
+                train_data=transformed_features_squeezed,
+                data_dim=output_dimensions,
+                output_info_list=output_info_list, 
+                model_path=ctgan_model_path,
+                losses_path=ctgan_losses_path,
+                synthetic_data_path=ctgan_synthetic_data_path,
+                sample_size=sample_size
+                )
+
+        # Train and save TVAE model
+        print('TRAINING TVAE MODEL...')
+        synthetic_data_tvae = train_tvae(
+                args_dict=args_dict,
+                train_data=transformed_features_squeezed,
+                data_dim=output_dimensions,
+                output_info_list=output_info_list,
+                model_path=tvae_model_path,
+                losses_path=tvae_losses_path,
+                synthetic_data_path=tvae_synthetic_data_path,
+                tvae_sigmas_path=tvae_sigmas_path,
+                sample_size=sample_size
+                )

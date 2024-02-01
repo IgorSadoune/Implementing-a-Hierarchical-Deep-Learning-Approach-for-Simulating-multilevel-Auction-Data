@@ -1,25 +1,37 @@
-import pickle
-import pandas as pd
-import os 
-import sys
-sys.path.append(os.path.join(os.path.dirname(__file__), '..', 'modules'))
-from transformer import DataTransformer # necessary to load info dict
+class SVR(torch.nn.Module):
+    '''
+    '''
+    def __init__(self, input_dim):
+        super(SVR, self).__init__()
+        '''
+        '''
 
-# Paths
-current_path = os.path.dirname(os.path.abspath(__file__))
-features_squeezed_path = os.path.join(current_path, '../../data/features_squeezed.npy')
-synthetic_data_ctgan_path = os.path.join(current_path, '../../data/synthetic_data_ctgan.npy')
-synthetic_data_tvae_path = os.path.join(current_path, '../../data/synthetic_data_tvae.npy')
-info_path = os.path.join(current_path, '../../data/info.pkl')
+        self.input_dim = input_dim
+        self.model = torch.nn.Linear(self.input_dim, 2)
 
-original_features_path = os.path.join(current_path, '../../data/original_features.pkl')
-original_features = pd.read_pickle(original_features_path)
+    def outlayer(self, x):
+        '''
+        desc: creates appropriate output activation for Guassian netwrok
+        ----
+        input: x: output from previous layer -> torch.tensor(prev_layer_in, prev_layer_out)
+        -----
+        output: out -> torch.tensor(2,1)
+        '''
+        #get dim of input
+        dim_ = len(x.size())
 
-# Load info
-with open(info_path, 'rb') as f:
-    info = pickle.load(f)
-output_info_list = info["output_info_list"]
-print(sum(info[0].dim for info in output_info_list[:1]))
-print(output_info_list[1][0].dim)
+        #separate parameters
+        mu, sigma = torch.unbind(x, dim=1)
 
-print(original_features.columns)
+        #add one dimension to make the right shape
+        mu = torch.unsqueeze(mu, dim=1)
+        sigma = torch.unsqueeze(sigma, dim=1)
+        
+        #relu to sigma bacause variance is positive
+        sigma = torch.nn.functional.relu(sigma)
+
+        return torch.cat((mu, sigma), dim=dim_-1)
+
+    def forward(self, x):
+
+        return self.outlayer(self.model(x))

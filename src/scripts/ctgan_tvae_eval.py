@@ -76,7 +76,7 @@ def inception_score(train_data, test_data, train_target, test_target):
     classifiers = [
         KNeighborsClassifier(5), # deterministic
         DecisionTreeClassifier(max_depth=20, random_state=42),
-        MLPClassifier(alpha=1, max_iter=1000, early_stopping=True, random_state=42)
+        MLPClassifier(alpha=1, max_iter=1000, early_stopping=True, random_state=42, learning_rate=1e-3)
         ]
     # Training classifiers and classification reports
     for name, clf in zip(names, classifiers):
@@ -91,31 +91,32 @@ def inception_score(train_data, test_data, train_target, test_target):
         print('TEST')
         print(classification_report(test_target, get_label_binary(pred_test)))
 
-# Paths
-current_path = os.path.dirname(os.path.abspath(__file__))
-features_squeezed_path = os.path.join(current_path, '../../data/features_squeezed.npy')
-synthetic_data_ctgan_path = os.path.join(current_path, '../../data/synthetic_data_ctgan.npy')
-synthetic_data_tvae_path = os.path.join(current_path, '../../data/synthetic_data_tvae.npy')
-info_path = os.path.join(current_path, '../../data/info.pkl')
+if __name__=="__main__":
 
-# Load info
-with open(info_path, 'rb') as f:
-    info = pickle.load(f)
-output_info_list = info["output_info_list"]
-data_index = info['data_index']
+    # Paths
+    current_path = os.path.dirname(os.path.abspath(__file__))
+    features_squeezed_path = os.path.join(current_path, '../../data/features_squeezed.npy')
+    synthetic_data_ctgan_path = os.path.join(current_path, '../../data/synthetic_data_ctgan.npy')
+    synthetic_data_tvae_path = os.path.join(current_path, '../../data/synthetic_data_tvae.npy')
+    info_path = os.path.join(current_path, '../../data/info.pkl')
 
-# Load synthetic data
-synthetic_data_ctgan = np.load(synthetic_data_ctgan_path)
-synthetic_data_tvae = np.load(synthetic_data_tvae_path)
+    # Load info
+    with open(info_path, 'rb') as f:
+        info = pickle.load(f)
+    output_info_list = info["output_info_list"]
 
-# Load real data
-features_squeezed = np.load(features_squeezed_path)
+    # Load synthetic data
+    synthetic_data_ctgan = np.load(synthetic_data_ctgan_path)
+    synthetic_data_tvae = np.load(synthetic_data_tvae_path)
 
-# Extract binary municipality as target + inception score
-variable_index = 1 #municipality
-for synth in [synthetic_data_ctgan, synthetic_data_tvae]:
-    train_data, test_data, train_target, test_target  = data_prep(features_squeezed,
-                                                                synth, 
-                                                                output_info_list, 
-                                                                variable_index)
-    inception_score(train_data, test_data, train_target, test_target)
+    # Load real data
+    features_squeezed = np.load(features_squeezed_path)
+
+    # Extract binary municipality as target + inception score
+    variable_index = 1 #municipality
+    for synth in [synthetic_data_ctgan, synthetic_data_tvae]:
+        train_data, test_data, train_target, test_target  = data_prep(features_squeezed,
+                                                                    synth, 
+                                                                    output_info_list, 
+                                                                    variable_index)
+        inception_score(train_data, test_data, train_target, test_target)
