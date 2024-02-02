@@ -63,7 +63,7 @@ The required python libraries are listed in the "requirements.txt" file. Those c
 2. Extract the files into the `multi-level-auction-generator/data/` folder.
 
 # File Description
-We recommend reading the file_description.md file, which catalogs and describes all the files that make up the project.
+We recommend reading the `file_description.md` file, which catalogs and describes all the files that make up the project.
 
 # Study Replication
 
@@ -83,7 +83,7 @@ Or
 
 Run the entire routine, including the training of the CTGAN, TVAE, BidNet and classifiers for inception scoring. Note that the full routine took approximately 8 hours on a RTX2060.
 
-1. Make sure that the pickle file "raw_data.pkl" is in the folder `multi-level-auction-generator/data/`. Only this one file is necessary to run the full routine. 
+1. Make sure that the pickle file `raw_data.pkl` is in the folder `multi-level-auction-generator/data/`. Only this one file is necessary to run the full routine. 
 
 2. Run the test file which execute the routine with a small amount of data and training iterations
 
@@ -105,15 +105,15 @@ This will train the models and output the results displayed in Table 2, 3, and 4
 
 ## Validation Routine
 
-To replicate the study without training the models again
+To replicate the study without training the models
 
 1. Make sure that the files:
 
-- "transformed_features_squeezed.npy"
-- "synthetic_data_ctgan.npy" 
-- "synthetic_data_tvae.npy" 
-- "transformed_features.npy"
-- "average_standardized_log_bids.npy"
+- `transformed_features_squeezed.npy`
+- `synthetic_data_ctgan.npy` 
+- `synthetic_data_tvae.npy` 
+- `transformed_features.npy`
+- `average_standardized_log_bids.npy`
 
 are in the `multi-level-auction-generator/data/` folder.
 
@@ -139,7 +139,7 @@ Alternatively, python files can be ran individually using, for example,
 
 Replace "data_transform.py" by the file you need to run. 
 
-**Note that running a training scripts (any python file ending with "_train.py") with the argument --save_model (e.g., python3 src/script/budnet_train.py --save_model), will overwright associated model parameters. Running any script may also overwright output.** 
+**Note that running a training scripts (any python file ending with "_train.py") with the argument --save_model (e.g., python3 src/script/bidnet_train.py --save_model), will overwright associated model parameters stored in `multi-level-auction-generator/models/`. Running any script may also overwright data output stored in `multi-level-auction-generator/data/`.** 
 
 # License
 
