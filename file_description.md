@@ -24,7 +24,8 @@
 
 ## Executables (root)
 
-- **test_full.sh**: Run all the executables in `src/scripts/` in correct order with a small amount of data. RUNNING THIS TEST FILE WILL OVERRIGHT DATA SAMPLES WITH TEST VERSION IN `data/`, AND THEREFORE WILL NOT PRODUCE THE SAME METRICS. TO EXECUTE BEFORE `full.sh` IF THE USER WANTS TO REPLICATE THE TRAINING PROCESS.
+- **test_full.sh**: Run all the executables in `src/scripts/` in correct order with a small amount of data. To be executed before `full.sh` to prevent errors.
+**Running the test routine will overwrite data samples with their test versions in `multi-level-auction-generator/data/`, and therefore will not produce the metrics displayed in the paper.** 
 
 - **full.sh**: Run all the executables in `src/scripts/` in correct order with the entire data, producing the results of Table 2, 3, and 4.
 
@@ -164,8 +165,6 @@ Data available at: https://zenodo.org/records/10611796.
 
 
 ## TRAINED PARAMETERS
-Models available at: https://zenodo.org/records/10611796.
-
 
     FILE NAME            FILE PATH
     ---------            ---------
