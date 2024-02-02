@@ -140,6 +140,7 @@ TVAE module. Customized version of the CTGAN class, inspired by the original CTG
 BidNet network and class agent.
 
 ## Data Files (data/)
+Data available at: https://zenodo.org/records/10611796.
 
     FILE NAME                           FILE PATH                                FILE DESCRIPTION
     ---------                           ---------                                ----------------
@@ -163,6 +164,8 @@ BidNet network and class agent.
 
 
 ## TRAINED PARAMETERS
+Models available at: https://zenodo.org/records/10611796.
+
 
     FILE NAME            FILE PATH
     ---------            ---------
@@ -175,4 +178,4 @@ BidNet network and class agent.
 ## SUPPORT FILES
 
 - **requirements.txt**: Contains a list of Python libraries and packages needed to run the executables.
-- **architecture.txt**: Contains the directory structure of the repo. THIS STRUCTURE MUST BE RESPECTED.
+- **architecture.txt**: Contains the directory structure of the repo. **Note that this structure must be preserved.**
