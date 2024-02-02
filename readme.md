@@ -58,16 +58,16 @@ The required python libraries are listed in the "requirements.txt" file. Those c
 
 # Data Download
 
-1. Download the datasets from [this link](https://zenodo.org/records/10611796).
+1. Download the `datasets.zip` file from [this link](https://zenodo.org/records/10611796).
 
-2. Place the downloaded pickle and numpy files (.pkl and .npy) in the ROOT of the "multi-level-auction-generator" folder.
+2. Extract the files into the `multi-level-auction-generator/data/` folder.
 
 # File Description
 We recommend reading the file_description.md file, which catalogs and describes all the files that make up the project.
 
 # Study Replication
 
-**Always place yourself at the root of the repository**
+**Always place yourself at the root of the repository (multi-level-auction-generator/)**
 
 There are two ways to replicate the study:
 
@@ -83,7 +83,7 @@ Or
 
 Run the entire routine, including the training of the CTGAN, TVAE, BidNet and classifiers for inception scoring. Note that the full routine took approximately 8 hours on a RTX2060.
 
-1. Place the pickle file "raw_data.pkl" (only this one) in the folder "data".
+1. Make sure that the pickle file "raw_data.pkl" is in the folder `multi-level-auction-generator/data/`. Only this one file is necessary to run the full routine. 
 
 2. Run the test file which execute the routine with a small amount of data and training iterations
 
@@ -107,7 +107,7 @@ This will train the models and output the results displayed in Table 2, 3, and 4
 
 To replicate the study without training the models again
 
-1. Place the files:
+1. Make sure that the files:
 
 - "transformed_features_squeezed.npy"
 - "synthetic_data_ctgan.npy" 
@@ -115,7 +115,7 @@ To replicate the study without training the models again
 - "transformed_features.npy"
 - "average_standardized_log_bids.npy"
 
-in the "multi-level-auction-generator/data/" folder.
+are in the `multi-level-auction-generator/data/` folder.
 
 2. Run the validation procedure by executing
 
