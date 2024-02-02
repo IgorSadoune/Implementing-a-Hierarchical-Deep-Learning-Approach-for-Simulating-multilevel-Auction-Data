@@ -177,4 +177,3 @@ Data available at: https://zenodo.org/records/10611796.
 ## SUPPORT FILES
 
 - **requirements.txt**: Contains a list of Python libraries and packages needed to run the executables.
-- **architecture.txt**: Contains the directory structure of the repo. **Note that this structure must be preserved.**
