@@ -1,6 +1,9 @@
 #src/scripts/msvr.py
 
 """
+PRODUCES RESULTS OF TABLE 3 FOR THE MSVR.
+-----------------------------------------
+
 This script trains a multi-output support vector machine regression (MSVR) model.
 
 Inputs:

@@ -1,6 +1,9 @@
 # src/scripts/training_bidnet.py
 
 """
+PRODUCES RESULTS OF TABLE 3 FOR THE BidNet
+------------------------------------------
+
 This script 
     1) trains the BidNet using K-fold cross-validation and early stopping
     2) uses trained BidNet parameters to predict synthetic bids from real and synthetic features

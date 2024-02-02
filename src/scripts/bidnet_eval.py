@@ -1,6 +1,9 @@
 #src/scripts/bidnet_eval.py
 
 """
+PRODUCES RESULTS OF TABLE 4
+---------------------------
+
 This script measures probability distributions distances based on quantile-to-quantile root mean squared error (QQRMSE) and 
 earth mover distance (EMD, aslo called Wasserstein distance).
 

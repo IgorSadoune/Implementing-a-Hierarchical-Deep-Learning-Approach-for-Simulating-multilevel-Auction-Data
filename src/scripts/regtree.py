@@ -1,6 +1,9 @@
 #src/scripts/regtree.py
 
 """
+PRODUCES RESULTS OF TABLE 3 FOR THE REGTREE
+-------------------------------------------
+
 This script trains a multi-output regression tree (regtree) model.
 
 Inputs:

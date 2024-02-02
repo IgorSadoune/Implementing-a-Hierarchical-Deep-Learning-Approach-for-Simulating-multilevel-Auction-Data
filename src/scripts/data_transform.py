@@ -146,6 +146,7 @@ if __name__=="__main__":
     # Parser for test size data
     parser = argparse.ArgumentParser()
     parser.add_argument("--test", action='store_true', help="Use a small amount of data for test.")
+    parser.add_argument("--seed", type=int, default=42, help="Seed.")
     args = parser.parse_args()
 
     # Load raw SEAO data
@@ -177,7 +178,7 @@ if __name__=="__main__":
 
     # Transform features
     discrete_columns = list(features.columns)
-    transformer = DataTransformer(seed=42) 
+    transformer = DataTransformer(seed=args.seed) 
     transformer.fit(features, discrete_columns)
     transformed_features = transformer.transform(features)
     

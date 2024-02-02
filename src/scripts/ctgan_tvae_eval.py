@@ -1,6 +1,9 @@
 #src/scripts/ctgan_tvae_eval.py
 
 """
+PRODUCES RESULTS OF TABLE 2
+---------------------------
+
 This script trains three classifiers (K-NN, classification Tree and classification MLP) on synthetic data, 
 and evaluates them on real data, in order to generate inception scores.
 
