@@ -9,10 +9,10 @@ python3 src/scripts/ctgan_tvae_train.py --save_model --verbose
 # Run bidnet_train.py: trains the bidnet to predict bids from features
 python3 src/scripts/bidnet_train.py --save_model --verbose
 
-# Run bidnet_train.py: trains the MSVR to predict bids from features
+# Run msvr.py: trains the MSVR to predict bids from features
 python3 src/scripts/msvr.py --save_model --verbose
 
-# Run bidnet_train.py: trains the multi-output regression tree to predict bids from features
+# Run regtree.py: trains the multi-output regression tree to predict bids from features
 python3 src/scripts/regtree.py --save_model --verbose
 
 # Run ctgan_tvae_eval.py: performs inception scoring by training three classifiers on the real and synthetic data

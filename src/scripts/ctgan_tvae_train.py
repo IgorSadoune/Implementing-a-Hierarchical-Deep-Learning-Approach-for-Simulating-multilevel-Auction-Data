@@ -127,7 +127,7 @@ if __name__=="__main__":
         parser.add_argument("--ctgan_discriminator_decay", type=float, default=1e-6, help="CTGAN discriminator weight decay.")
         parser.add_argument("--ctgan_batch_size", type=int, default=500, help="CTGAN batch size.")
         parser.add_argument("--ctgan_discriminator_steps", type=int, default=1, help="CTGAN number of discriminator steps.")
-        parser.add_argument("--ctgan_epochs", type=int, default=100, help="CTGAN number of epochs.")
+        parser.add_argument("--ctgan_epochs", type=int, default=150, help="CTGAN number of epochs.")
         parser.add_argument("--ctgan_pac", type=int, default=10, help="CTGAN privacy amplification factor.")
         parser.add_argument("--log_frequency", action="store_false", help="Log training progress at each epoch.")
         parser.add_argument("--verbose", action="store_true", help="Display detailed training progress information.")

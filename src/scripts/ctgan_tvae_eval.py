@@ -78,7 +78,7 @@ def inception_score(train_data, test_data, train_target, test_target):
     classifiers = [
         KNeighborsClassifier(5), # deterministic
         DecisionTreeClassifier(max_depth=20, random_state=42),
-        MLPClassifier(alpha=1, max_iter=1000, early_stopping=True, random_state=42, learning_rate=1e-3)
+        MLPClassifier(alpha=1, max_iter=1000, early_stopping=True, random_state=42)
         ]
     # Training classifiers and classification reports
     for name, clf in zip(names, classifiers):
@@ -116,9 +116,11 @@ if __name__=="__main__":
 
     # Extract binary municipality as target + inception score
     variable_index = 1 #municipality
-    for synth in [synthetic_data_ctgan, synthetic_data_tvae]:
+    for synth, t in zip([synthetic_data_ctgan, synthetic_data_tvae], ['a', 'b']):
         train_data, test_data, train_target, test_target  = data_prep(features_squeezed,
                                                                     synth, 
                                                                     output_info_list, 
                                                                     variable_index)
+        print(t)
+        print(train_target.shape)
         inception_score(train_data, test_data, train_target, test_target)

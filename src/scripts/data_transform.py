@@ -151,14 +151,13 @@ if __name__=="__main__":
     # Load raw SEAO data
     current_path = os.path.abspath(os.path.dirname(__file__))
     data_file_path = os.path.join(current_path, '..', '..', 'data', 'raw_data.pkl')
-    data = pd.read_pickle(data_file_path)
     if args.test:
-        size = 1000
+        data = pd.read_pickle(data_file_path)[:10000]
     else:
-        size = data.shape[0]
+        data = pd.read_pickle(data_file_path)
 
     # Clean the data and extract n_bidders
-    data = clean_data(data[:size])
+    data = clean_data(data)
 
     # Isolate features from bids
     bids = pd.to_numeric(data.bids)
@@ -185,17 +184,17 @@ if __name__=="__main__":
     # Remove duplicates in features
     compact_size = np.unique(features.index).shape[0]
     transformed_features_squeezed = pd.DataFrame(transformed_features)
-    transformed_features_squeezed.index = data.index
-    transformed_features_squeezed.drop_duplicates(subset=transformed_features_squeezed.index, keep='first', inplace=True)
+    transformed_features_squeezed['index'] = list(data.index)
+    transformed_features_squeezed.drop_duplicates(subset='index', keep='first', inplace=True)
     assert transformed_features_squeezed.shape[0] == compact_size, "Wrong size in dimension 0"
+    transformed_features_squeezed.drop('index', axis=1, inplace=True)
+    transformed_features_squeezed = np.array(transformed_features_squeezed)
 
     # Info
-    n_bidders = np.array(pd.to_numeric(transformed_features_squeezed.n_bidders)).reshape(-1,1)
     info = {
         'output_info_list': transformer.output_info_list,
         'column_transform_info_list': transformer.column_transform_info_list,
         'data_dim': transformer.output_dimensions,
-        'n_bidders': n_bidders
     }
 
     # Save data

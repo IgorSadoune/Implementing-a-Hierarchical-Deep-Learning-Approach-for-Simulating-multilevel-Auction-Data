@@ -33,7 +33,7 @@ import numpy as np
 import pandas as pd
 import torch
 sys.path.append(os.path.join(os.path.dirname(__file__), '..', 'modules'))
-from bidnet import BidNetAgent
+from bidnet import BidNetAgent, BidNet
 
 def generate_bids_from_prediction(mu, sigma, seed=None):
     if seed is not None:
@@ -42,9 +42,9 @@ def generate_bids_from_prediction(mu, sigma, seed=None):
         else:
             torch.manual_seed(args.seed)
     # Generate random samples from a normal distribution for each element in mu and sigma
-    samples = [torch.normal(mu_i.cpu().detach(), sigma_i.cpu().detach()).cpu().numpy() for mu_i, sigma_i in zip(mu, sigma)]
+    samples = [torch.normal(mu_i.cpu().detach(), sigma_i.cpu().detach()).numpy() for mu_i, sigma_i in zip(mu, sigma)]
     # Flatten the list of samples and convert it to a NumPy array
-    bid_array = np.array([item for sublist in samples for item in sublist])
+    bid_array = np.array([item for sublist in samples for item in sublist])[:mu.size()[0]]
     # Reshape the array to have a single column (-1 means the number of rows will be inferred)
     bid_array = bid_array.reshape(-1, 1)
     return bid_array
@@ -101,7 +101,7 @@ if __name__=="__main__":
                     save_model=args.save_model
                     )
 
-    # Train EmbeddedNet or Net and save model
+    # Train model
     model.fit(features, standardized_log_bids)
 
     # Save losses
@@ -118,7 +118,12 @@ if __name__=="__main__":
                     [features_squeezed, synthetic_data_ctgan, synthetic_data_tvae],
                     ['b_hat', 'b_tilde_ctgan', 'b_tilde_tvae']
                     ):
+        
         mu, sigma = model.predict(data)
+
+        # Generates bids
         pred = generate_bids_from_prediction(mu, sigma, seed=args.seed)
+
+        # Save synthetic bids
         if args.save_model:
             np.save(os.path.join(current_path, '..', '..', 'data', path + '.npy'), pred)

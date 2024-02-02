@@ -37,8 +37,8 @@ if __name__=="__main__":
 
 	# Load data
 	current_path = os.path.dirname(os.path.abspath(__file__))
-	standardized_log_average_bids_path = os.path.join(current_path, '../../data/average_standardized_log_bids.npy')
-	standardized_log_average_bids = np.load(standardized_log_average_bids_path)
+	average_standardized_log_bids_path = os.path.join(current_path, '../../data/average_standardized_log_bids.npy')
+	average_standardized_log_bids = np.load(average_standardized_log_bids_path)
 
 	# Load synthetic bids
 	synthetic_bids = {}
@@ -47,11 +47,11 @@ if __name__=="__main__":
 		
 	# Metrics
 	rmse, ws = {}, {}
-	rmse['b_hat_vs_b'], ws['b_hat_vs_b'] = get_metrics(synthetic_bids['b_hat'], standardized_log_average_bids)
+	rmse['b_hat_vs_b'], ws['b_hat_vs_b'] = get_metrics(synthetic_bids['b_hat'], average_standardized_log_bids)
 	rmse['b_hat_vs_b_tilde_ctgan'], ws['b_hat_vs_btilde_ctgan'] = get_metrics(synthetic_bids['b_hat'], synthetic_bids['b_tilde_ctgan'])
 	rmse['b_hat_vs_b_tilde_tvae'], ws['b_hat_vs_btilde_tvae'] = get_metrics(synthetic_bids['b_hat'], synthetic_bids['b_tilde_tvae'])
-	rmse['b_tilde_ctagn_vs_b'], ws['b_tilde_ctagn_vs_b'] = get_metrics(synthetic_bids['b_tilde_ctgan'], standardized_log_average_bids)
-	rmse['b_tilde_tvae_vs_b'], ws['b_tilde_tvae_vs_b'] = get_metrics(synthetic_bids['b_tilde_tvae'], standardized_log_average_bids)
+	rmse['b_tilde_ctagn_vs_b'], ws['b_tilde_ctagn_vs_b'] = get_metrics(synthetic_bids['b_tilde_ctgan'], average_standardized_log_bids)
+	rmse['b_tilde_tvae_vs_b'], ws['b_tilde_tvae_vs_b'] = get_metrics(synthetic_bids['b_tilde_tvae'], average_standardized_log_bids)
 
 	# Results
 	print('RMSE:', rmse)
