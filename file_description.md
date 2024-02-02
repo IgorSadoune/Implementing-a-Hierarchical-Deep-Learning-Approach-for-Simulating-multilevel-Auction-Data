@@ -176,4 +176,13 @@ Data available at: https://zenodo.org/records/10611796.
 
 ## SUPPORT FILES
 
+### Root
+
 - **requirements.txt**: Contains a list of Python libraries and packages needed to run the executables.
+
+### xml_to_pickle/
+
+**Those files are not use to replicate the study, but can be valuable for users willing to deal with SEAO data files directly.**
+
+- **xml_to_pkl.py**: Class module to convert xml tree into pandas dataframe.
+- **xml_unfold.py**: Script converting SEAO xml files into pandas dataframes.
