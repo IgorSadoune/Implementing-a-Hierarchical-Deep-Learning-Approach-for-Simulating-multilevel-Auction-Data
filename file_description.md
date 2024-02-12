@@ -9,6 +9,7 @@
    - [msvr.py](#msvrpy)
    - [regtree.py](#regtreepy)
    - [bidnet_eval.py](#bidnet_evalpy)
+   - [qq_plots.py](qq_plots.py)
 3. [Modules (src/modules/)](#modules-srcmodules)
    - [transformer.py](#transformerpy)
    - [sampler.py](#samplerpy)
@@ -118,6 +119,14 @@ PRODUCES RESULTS OF TABLE 4. This script measures probability distributions dist
 - **Outputs**:
     - QQ-RMSE: b_hat vs standardized_log_bids, b_hat vs b_tilde_ctgan, b_hat vs b_tilde_tvae, b_tilde_ctgan vs b, b_tilde_tvae vs b
     - EMD: b_hat vs standardized_log_bids, b_hat vs b_tilde_ctgan, b_hat vs b_tilde_tvae, b_tilde_ctgan vs b, b_tilde_tvae vs b
+
+## qq_plots.py
+PRODUCES FIGURE 1. This script outputs the quantile-to-quantile plots of the theoretical normal distribution against mode-specific normalization, minmax normalization and standardization of the logarithmic bids.
+- **Inputs**:
+    - `../../data/standardized_log_bids.npy`
+    - `../../data/bids.npy`
+- **Outputs**:
+    - `../../data/qq_plots.png`
 
 # Modules (src/modules/)
 
