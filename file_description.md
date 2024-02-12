@@ -1,8 +1,7 @@
 # Table of Contents
 
-1. [Project Documentation](#project-documentation)
-2. [Executables (root)](#executables-root)
-3. [Scripts (src/scripts/)](#scripts-srcscripts)
+1. [Executables (root)](#executables-root)
+2. [Scripts (src/scripts/)](#scripts-srcscripts)
    - [data_transform.py](#data_transformpy)
    - [ctgan_tvae_train.py](#ctgan_tvaetrainpy)
    - [ctgan_tvae_eval.py](#ctgan_tvae_evalpy)
@@ -10,19 +9,19 @@
    - [msvr.py](#msvrpy)
    - [regtree.py](#regtreepy)
    - [bidnet_eval.py](#bidnet_evalpy)
-4. [Modules (src/modules/)](#modules-srcmodules)
+3. [Modules (src/modules/)](#modules-srcmodules)
    - [transformer.py](#transformerpy)
    - [sampler.py](#samplerpy)
    - [ctgan.py](#ctganpy)
    - [tvae.py](#tvaepy)
    - [bidnet.py](#bidnetpy)
-5. [Data Files (data/)](#data-files-data)
-6. [TRAINED PARAMETERS](#trained-parameters)
-7. [SUPPORT FILES](#support-files)
+4. [Data Files (data/)](#data-files-data)
+5. [TRAINED PARAMETERS](#trained-parameters)
+6. [SUPPORT FILES](#support-files)
+    - [root](#root)
+    - [xml_to_pickle/](#xml-to-pickle/)
 
-# Project Documentation
-
-## Executables (root)
+# Executables (root)
 
 - **test_full.sh**: Run all the executables in `src/scripts/` in correct order with a small amount of data. To be executed before `full.sh` to prevent errors.
 **Running the test routine will overwrite data samples with their test versions in `multi-level-auction-generator/data/`, and therefore will not produce the metrics displayed in the paper.** 
@@ -33,9 +32,9 @@
 
 - **.bat files**: FOR WINDOWS USERS, execute `test_full.bat`, `full.bat` or `validation.bat` instead of their `.sh` counterparts.
 
-## Scripts (src/scripts/)
+# Scripts (src/scripts/)
 
-### data_transform.py
+## data_transform.py
 Preprocesses raw SEAO data to extract relevant features and targets, focusing on open public auctions in three sectors: supply, services, and construction.
 - **Inputs**:
     -data/raw_data.pkl`: A pickled DataFrame containing the raw SEAO data after transformation from XML format.
@@ -50,7 +49,7 @@ Preprocesses raw SEAO data to extract relevant features and targets, focusing on
     - `data/transformed_features_squeezed.npy`: squeezed (one line per auction) transformed auction features (onehot encoding)
     - `data/info.pkl`: dictionary containing output_info_list, column_transform_info_list, n_bidders, and data_dim
 
-### ctgan_tvae_train.py
+## ctgan_tvae_train.py
 Trains two synthetic data generators, CTGAN and TVAE, on transformed data, generating synthetic datasets.
 - **Inputs**:
     - `data/transformed_features_squeezed.npy`
@@ -63,7 +62,7 @@ Trains two synthetic data generators, CTGAN and TVAE, on transformed data, gener
     - ctgan losses: `data/ctgan_losses.pkl`
     - tvae losses: `data/tvae_losses.pkl`
 
-### ctgan_tvae_eval.py
+## ctgan_tvae_eval.py
 PRODUCES RESULTS OF TABLE 2. This script trains three classifiers (K-NN, classification Tree and classification MLP) on synthetic data, and evaluates them on real data, in order to generate inception scores.
 - **Inputs**:
         - `data/transformed_features_squeezed.npy`
@@ -73,7 +72,7 @@ PRODUCES RESULTS OF TABLE 2. This script trains three classifiers (K-NN, classif
 - **Outputs**:
         - inception metrics: three classification reports
 
-### bidnet_train.py
+## bidnet_train.py
 PRODUCES RESULTS OF TABLE 3 FOR THE BidNet. This script trains the BidNet using K-fold cross-validation and early stopping and uses trained BidNet parameters to predict synthetic bids from real and synthetic features.
 -**Inputs**:
     - `data/transformed_features.npy`
@@ -89,7 +88,7 @@ PRODUCES RESULTS OF TABLE 3 FOR THE BidNet. This script trains the BidNet using 
     - bidnet model: `models/bidnet_model.pkl`
     - bidnet losses: `data/bidnet_losses.pkl`
 
-### msvr.py
+## msvr.py
  PRODUCES RESULTS OF TABLE 3 FOR THE MSVR. This script trains a multi-output support vector machine regression (MSVR) model.
 - **Inputs**:
     - `data/transformed_features_squeezed.npy`
@@ -99,7 +98,7 @@ PRODUCES RESULTS OF TABLE 3 FOR THE BidNet. This script trains the BidNet using 
 - **Outputs**:
     - msvr model: `models/svr_model.pt`
 
-### regtree.py
+## regtree.py
 PRODUCES RESULTS OF TABLE 3 FOR THE REGTREE. This script trains a multi-output regression tree (regtree) model.
 - **Inputs**:
     - `data/transformed_features_squeezed.npy`
@@ -109,7 +108,7 @@ PRODUCES RESULTS OF TABLE 3 FOR THE REGTREE. This script trains a multi-output r
 - **Outputs**:
     - reg tree model: `models/regtree_model.pt`
 
-### bidnet_eval.py
+## bidnet_eval.py
 PRODUCES RESULTS OF TABLE 4. This script measures probability distributions distances based on quantile-to-quantile root mean squared error (QQRMSE) and earth mover distance (EMD, aslo called Wasserstein distance).
 - **Inputs**:
     - `data/average_standardized_log_bids.npy`
@@ -120,28 +119,28 @@ PRODUCES RESULTS OF TABLE 4. This script measures probability distributions dist
     - QQ-RMSE: b_hat vs standardized_log_bids, b_hat vs b_tilde_ctgan, b_hat vs b_tilde_tvae, b_tilde_ctgan vs b, b_tilde_tvae vs b
     - EMD: b_hat vs standardized_log_bids, b_hat vs b_tilde_ctgan, b_hat vs b_tilde_tvae, b_tilde_ctgan vs b, b_tilde_tvae vs b
 
-## Modules (src/modules/)
+# Modules (src/modules/)
 
-### transformer.py
+## transformer.py
 DataTransformer module. Modified version of the original CTGAN data_transformer.py file: 
 https://github.com/sdv-dev/CTGAN/blob/main/ctgan/data_transformer.py. The main modification 
 is the disentenglement of the transformer class form Base Synthesizer and CTGAN and TVAE classes,providing more flexibility.
 
-### sampler.py
+## sampler.py
 DataSampler module. Modified version of the original CTGAN data_sampler.py file: 
 https://github.com/sdv-dev/CTGAN/blob/main/ctgan/data_sampler.py.
 
-### ctgan.py
+## ctgan.py
 CTGAN module. Customized version of the CTGAN class, inspired by the original CTGAN class implementation: https://github.com/sdv-dev/CTGAN/blob/main/ctgan/synthesizers/ctgan.py. Modifications involve mainly the structure of the class to best fit the needs of our study, as well as customized random state management.
 
-### tvae.py
+## tvae.py
 TVAE module. Customized version of the CTGAN class, inspired by the original CTGAN class implementation: https://github.com/sdv-dev/CTGAN/blob/main/ctgan/synthesizers/tvae.py. Modifications involve mainly the structure of the class to best fit the needs of our study, as well as customized random state management.
 
-### bidnet.py
+## bidnet.py
 BidNet network and class agent.
 
-## Data Files (data/)
-Data available at: https://zenodo.org/records/10611796.
+# Data Files (data/)
+Data and models (trained parameters) available at https://zenodo.org/records/10649028.
 
     FILE NAME                           FILE PATH                                FILE DESCRIPTION
     ---------                           ---------                                ----------------
@@ -164,7 +163,8 @@ Data available at: https://zenodo.org/records/10611796.
     - b_tilde_tvae.npy                  - data/b_tilde_tvae.npy                  - Predicted bids from synthetic features (TVAE)
 
 
-## TRAINED PARAMETERS
+# TRAINED PARAMETERS
+Data and models (trained parameters) available at https://zenodo.org/records/10649028.
 
     FILE NAME            FILE PATH
     ---------            ---------
@@ -174,13 +174,13 @@ Data available at: https://zenodo.org/records/10611796.
     - svr_model.pt       - models/svr_model.pt
     - regtree_model.pt   - models/regtree_model.pt
 
-## SUPPORT FILES
+# SUPPORT FILES
 
-### Root
+## root
 
 - **requirements.txt**: Contains a list of Python libraries and packages needed to run the executables.
 
-### xml_to_pickle/
+## xml_to_pickle/
 
 **Those files are not use to replicate the study, but can be valuable for users willing to deal with SEAO data files directly.**
 
