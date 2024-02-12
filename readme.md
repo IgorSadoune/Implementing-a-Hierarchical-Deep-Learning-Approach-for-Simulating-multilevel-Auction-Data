@@ -121,6 +121,7 @@ To replicate the study without training the models
 - `average_standardized_log_bids.npy`
 
 are in the `multi-level-auction-generator/data/` folder.
+**Note that if you have executed the test routine (test_full.sh or test_full.bat) prior to executing the validation routine, the required files mentioned above will have been overwritten by their test versions. As a result, the validation routine will not reproduce the results presented in the paper. The files listed above must either be produced by the full routine (by executing full.sh or full.bat) or be the original files contained in the datasets.zip archive.**
 
 2. Run the validation procedure by executing
 
