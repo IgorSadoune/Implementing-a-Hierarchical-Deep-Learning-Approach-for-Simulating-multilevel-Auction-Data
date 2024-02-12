@@ -60,7 +60,7 @@ The required python libraries are listed in the "requirements.txt" file. Those c
 
 1. Download the `datasets.zip` file from [this link](https://zenodo.org/records/10649028).
 
-2. Extract `datasets.zip`.
+2. Extract `datasets.zip` to a location outside of `multi-level-auction-generator/`.
 
 3. Copy all the 20 files inside the `datasets` folder (the newly unfolded archive) to the root of `multi-level-auction-generator/data/` folder. 
 **Make sure to copy and not move the files, as the datasets in the multi-level-auction-generator/data/ folder might be overwritten in subsequent steps.**
