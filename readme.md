@@ -62,10 +62,10 @@ The required python libraries are listed in the "requirements.txt" file. Those c
 
 2. Extract the files into the `multi-level-auction-generator/data/` folder.
 
-3. (optional) From the same address, download the `model_parameters.zip`, and extract it into the `multi-level-auction-generator/models/` folder.
+3. (optional) Download the `model_parameters.zip`, and extract it into the `multi-level-auction-generator/models/` folder.
 
 # File Description
-We recommend reading the `file_description.md` file, which catalogs and describes all the files that make up the project.
+We recommend reading the `file_description.md` file [here](https://github.com/IgorSadoune/multi-level-auction-generator/blob/master/file_description.md), which catalogs and describes all the files that make up the project.
 
 # Study Replication
 
