@@ -36,7 +36,7 @@ import numpy as np
 import pandas as pd
 import torch
 sys.path.append(os.path.join(os.path.dirname(__file__), '..', 'modules'))
-from bidnet import BidNetAgent, BidNet
+from bidnet import BidNetAgent
 
 def generate_bids_from_prediction(mu, sigma, seed=None):
     if seed is not None:
