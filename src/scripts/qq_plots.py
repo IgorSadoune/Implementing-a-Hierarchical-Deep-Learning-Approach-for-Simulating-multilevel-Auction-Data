@@ -14,7 +14,9 @@ import scipy.stats as stats
 PRODUCES FIGURE 1
 -----------------
 
-This script outputs the quantile-to-quantile plots of Figure 1.
+This script outputs the quantile-to-quantile plots of the theoretical normal distribution 
+against mode-specific normalization, minmax normalization and standardization 
+of the logarithmic bids.
 
 Inputs:
     '../../data/standardized_log_bids.npy'
