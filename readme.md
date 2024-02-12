@@ -144,7 +144,7 @@ Alternatively, python files can be ran individually using, for example,
 
 Replace "data_transform.py" by the file you need to run. 
 
-**Note that running a training scripts (any python file ending with "_train.py") with the argument --save_model (e.g., python3 src/script/bidnet_train.py --save_model), will overwright associated model parameters stored in `multi-level-auction-generator/models/`. Running any script may also overwrite data output stored in `multi-level-auction-generator/data/`.** 
+**Note that running training scripts (any Python file ending with "_train.py") with the argument --save_model (e.g., python3 src/script/bidnet_train.py --save_model) will overwrite the associated model parameters stored in multi-level-auction-generator/models/. Running any script may also overwrite data outputs stored in multi-level-auction-generator/data/.** 
 
 # License
 
