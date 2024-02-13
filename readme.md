@@ -35,21 +35,23 @@ We present a deep learning solution to address the challenges of simulating real
 
 ## Virtual Environment (optional but recommended)
 
-1. Create a virtual environment inside the downloaded repository
+1. Create a virtual environment inside the downloaded repository. Go to the root of the folder "multi-level-auction-generator" and execute:
 
-Go to the root of the folder "multi-level-auction-generator" and execute 
+- On Mac/Linux, execute:
+   `python3 -m venv venv`
+  
+- On Windows, execute:
+   `python -m venv venv`
 
-`python3 -m venv venv`
-
-2. Activate the virtual environment 
-
-Then, the virtual environment needs to be activated when you execute files from this repository. 
+2. Activate the virtual environment using:
 
 - On Mac/Linux, execute:
   `source venv/bin/activate`
   
 - On Windows, execute:
   `.\venv\Scripts\activate`
+
+**The virtual environment always needs to be activated when executing files from this repository.**
 
 ## Install the Required Dependencies:
 
@@ -66,7 +68,7 @@ The required python libraries are listed in the "requirements.txt" file. Those c
 3. Copy all the 20 files inside the `datasets` folder (the newly unfolded archive) to the root of `multi-level-auction-generator/data/` folder. 
 **Make sure to copy and not move the files, as the datasets in the multi-level-auction-generator/data/ folder might be overwritten in subsequent steps.**
 
-5. (optional) Download the `model_parameters.zip`, and extract it into the `multi-level-auction-generator/models/` folder.
+4. (optional) Download the `model_parameters.zip`, and extract it into the `multi-level-auction-generator/models/` folder.
 
 # File Description
 We recommend reading the `file_description.md` file [here](https://github.com/IgorSadoune/multi-level-auction-generator/blob/master/file_description.md), which catalogs and describes all the files that make up the project.
