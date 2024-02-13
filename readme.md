@@ -37,19 +37,19 @@ We present a deep learning solution to address the challenges of simulating real
 
 1. Create a virtual environment inside the downloaded repository. Go to the root of the folder "multi-level-auction-generator" and execute:
 
-   - On Mac/Linux, execute:
-   `python3 -m venv venv`
-  
-   - On Windows, execute:
-   `python -m venv venv`
+- On Mac/Linux, execute:
+`python3 -m venv venv`
+
+- On Windows, execute:
+`python -m venv venv`
 
 2. Activate the virtual environment using:
 
-   - On Mac/Linux, execute:
-  `source venv/bin/activate`
-  
-   - On Windows, execute:
-  `.\venv\Scripts\activate`
+- On Mac/Linux, execute:
+`source venv/bin/activate`
+
+- On Windows, execute:
+`.\venv\Scripts\activate`
 
 **The virtual environment always needs to be activated when executing files from this repository.**
 
@@ -61,17 +61,17 @@ The required python libraries are listed in the "requirements.txt" file. Those c
 
 **If for some reason an error occurs with one package, the following commands will allow you to install the subsequent packages in the list:**
 
-   - On Mac/Linux:
-     `while read package; do
-       pip install "$package" || echo "Failed to install $package" >&2
-   done < requirements.txt`
+- On Mac/Linux:
+  `while read package; do
+    pip install "$package" || echo "Failed to install $package" >&2
+done < requirements.txt`
 
-   - On Windows:
-      - if using PowerShell 7:
-        `Get-Content requirements.txt | ForEach-Object {
-          pip install $_ || Write-Error "Failed to install $_"}`
-      - or, if using command prompt:
-        `for /f %i in (requirements.txt) do pip install %i`
+- On Windows:
+   - if using PowerShell 7:
+     `Get-Content requirements.txt | ForEach-Object {
+       pip install $_ || Write-Error "Failed to install $_"}`
+   - or, if using command prompt:
+     `for /f %i in (requirements.txt) do pip install %i`
      
 **We do not provide support for Windows users utilizing PowerShell 5.**
 
@@ -111,19 +111,19 @@ Run the entire routine, including the training of the CTGAN, TVAE, BidNet and cl
 
 2. Run the test file which execute the routine with a small amount of data and training iterations
 
-   - On Mac/Linux, execute:
-       `bash test_full.sh`
+- On Mac/Linux, execute:
+    `bash test_full.sh`
 
-   - For Windows users:
-       `test_full.bat`
+- For Windows users:
+    `test_full.bat`
 
 3. If the test is successful (no error was raised), run the routine using the entirety of the data
 
-   - On Mac/Linux, execute:
-       `bash full.sh`
+- On Mac/Linux, execute:
+    `bash full.sh`
 
-   - For Windows users:
-       `full.bat`
+- For Windows users:
+    `full.bat`
 
 This will train the models and output the results displayed in Table 2, 3, and 4.
 
@@ -133,25 +133,25 @@ To replicate the study without training the models
 
 1. Make sure that the files:
 
-   - `transformed_features_squeezed.npy`
-   - `synthetic_data_ctgan.npy`
-   - `synthetic_data_tvae.npy`
-   - `info.pkl`
-   - `average_standardized_log_bids.npy`
-   - `b_hat.npy`
-   - `b_tilde_ctgan.npy`
-   - `b_tilde_tvae.npy`
+- `transformed_features_squeezed.npy`
+- `synthetic_data_ctgan.npy`
+- `synthetic_data_tvae.npy`
+- `info.pkl`
+- `average_standardized_log_bids.npy`
+- `b_hat.npy`
+- `b_tilde_ctgan.npy`
+- `b_tilde_tvae.npy`
 
 are in the `multi-level-auction-generator/data/` folder.
 **Note that if you have executed the test routine (test_full.sh or test_full.bat) prior to executing the validation routine, the required files mentioned above will have been overwritten by their test versions. As a result, the validation routine will not reproduce the results presented in the paper. The files listed above must either be produced by the full routine (by executing full.sh or full.bat) or be the original files contained in the datasets.zip archive.**
 
 2. Run the validation procedure by executing
 
-   - On Mac/Linux, execute:
-    `bash validation.sh`
-   
-   - For Windows users:
-    `validation.bat`
+- On Mac/Linux, execute:
+ `bash validation.sh`
+
+- For Windows users:
+ `validation.bat`
 
 This will output the results displayed in Table 2 and 4.
 
@@ -159,11 +159,11 @@ This will output the results displayed in Table 2 and 4.
 
 Alternatively, python files can be ran individually using, for example,
 
-   - On Mac/Linux, execute:
-    `python3 src/script/data_transform.py`
-    
-   - For Windows users:
-    `python src/script/data_transform.py`
+- On Mac/Linux, execute:
+ `python3 src/script/data_transform.py`
+ 
+- For Windows users:
+ `python src/script/data_transform.py`
 
 Replace "data_transform.py" by the file you need to run. 
 
