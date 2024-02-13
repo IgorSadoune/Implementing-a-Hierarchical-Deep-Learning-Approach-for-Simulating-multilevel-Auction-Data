@@ -59,6 +59,20 @@ The required python libraries are listed in the "requirements.txt" file. Those c
 
 `pip install -r requirements.txt`
 
+If for some reason an error occurs with one package, the following command
+
+- On Mac/Linux:
+  `while read package; do
+    pip install "$package" || echo "Failed to install $package" >&2
+done < requirements.txt`
+
+- On Windows:
+  `Get-Content requirements.txt | ForEach-Object {
+    pip install $_ || Write-Error "Failed to install $_"
+}`
+
+will allow you to install the subsequent packages in the list.
+
 # Data Download
 
 1. Download the `datasets.zip` file from [this link](https://zenodo.org/records/10649028).
