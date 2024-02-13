@@ -115,10 +115,14 @@ To replicate the study without training the models
 1. Make sure that the files:
 
 - `transformed_features_squeezed.npy`
-- `synthetic_data_ctgan.npy` 
-- `synthetic_data_tvae.npy` 
+- `synthetic_data_ctgan.npy`
+- `synthetic_data_tvae.npy`
 - `transformed_features.npy`
 - `average_standardized_log_bids.npy`
+- `b_hat.npy`
+- `b_tilde_ctgan.npy`
+- `b_tilde_tvae.npy`
+- `info.pkl`
 
 are in the `multi-level-auction-generator/data/` folder.
 **Note that if you have executed the test routine (test_full.sh or test_full.bat) prior to executing the validation routine, the required files mentioned above will have been overwritten by their test versions. As a result, the validation routine will not reproduce the results presented in the paper. The files listed above must either be produced by the full routine (by executing full.sh or full.bat) or be the original files contained in the datasets.zip archive.**
