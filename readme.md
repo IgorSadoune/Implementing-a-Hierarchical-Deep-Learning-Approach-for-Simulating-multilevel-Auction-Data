@@ -67,7 +67,7 @@ The required python libraries are listed in the "requirements.txt" file. Those c
 done < requirements.txt`
 
 - On Windows:
-   - if using: PowerShell 7 
+   - if using PowerShell 7:
      `Get-Content requirements.txt | ForEach-Object {
        pip install $_ || Write-Error "Failed to install $_"}`
    - or, if using command prompt:
