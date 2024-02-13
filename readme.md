@@ -18,8 +18,8 @@ We present a deep learning solution to address the challenges of simulating real
 
 # Requirements 
 
-- Git ([to install Git](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git))
-- Python: from v3.7 to v3.11 ([to intsall Python](https://www.python.org/downloads/))
+- Git ([install Git](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git))
+- Python: from v3.7 to v3.11 ([intsall Python](https://www.python.org/downloads/))
 - pip package installer (usually installed automatically with Python)
 - 32GB RAM
 - GPU access (optional but recommended)
