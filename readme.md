@@ -69,15 +69,6 @@ done < requirements.txt`
 - On Windows:
   `Get-Content requirements.txt | ForEach-Object {
     pip install $_ || Write-Error "Failed to install $_"}`
-  `Get-Content requirements.txt | ForEach-Object {
-    Try {
-        pip install $_ -ErrorAction Stop
-    }
-    Catch {
-        Write-Warning "Failed to install $_"
-    }
-}`
- 
 
 # Data Download
 
