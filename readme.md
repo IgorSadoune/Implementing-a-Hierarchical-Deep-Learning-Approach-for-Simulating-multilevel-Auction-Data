@@ -38,7 +38,7 @@ We present a deep learning solution to address the challenges of simulating real
 
 Go to the root of the folder "multi-level-auction-generator" and execute 
 
-`python -m venv venv`
+`python3 -m venv venv`
 
 2. Activate the virtual environment 
 
