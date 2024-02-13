@@ -59,7 +59,7 @@ The required python libraries are listed in the "requirements.txt" file. Those c
 
 `pip install -r requirements.txt`
 
-If for some reason an error occurs with one package, the following command
+If for some reason an error occurs with one package, the following command will allow you to install the subsequent packages in the list:
 
 - On Mac/Linux:
   `while read package; do
@@ -70,8 +70,6 @@ done < requirements.txt`
   `Get-Content requirements.txt | ForEach-Object {
     pip install $_ || Write-Error "Failed to install $_"
 }`
-
-will allow you to install the subsequent packages in the list.
 
 # Data Download
 
