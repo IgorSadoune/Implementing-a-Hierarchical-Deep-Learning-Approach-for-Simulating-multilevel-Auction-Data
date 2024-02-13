@@ -17,8 +17,8 @@
    - [tvae.py](#tvaepy)
    - [bidnet.py](#bidnetpy)
 4. [Data Files (data/)](#data-files-data)
-5. [TRAINED PARAMETERS](#trained-parameters)
-6. [SUPPORT FILES](#support-files)
+5. [Trained Parameters](#trained-parameters)
+6. [Support Files](#support-files)
     - [root](#root)
     - [xml_to_pickle/](#xml-to-pickle/)
 
@@ -172,7 +172,7 @@ Data and models (trained parameters) available at https://zenodo.org/records/106
     - b_tilde_tvae.npy                  - data/b_tilde_tvae.npy                  - Predicted bids from synthetic features (TVAE)
 
 
-# TRAINED PARAMETERS
+# Trained Parameters
 Data and models (trained parameters) available at https://zenodo.org/records/10649028.
 
     FILE NAME            FILE PATH
@@ -183,7 +183,7 @@ Data and models (trained parameters) available at https://zenodo.org/records/106
     - svr_model.pt       - models/svr_model.pt
     - regtree_model.pt   - models/regtree_model.pt
 
-# SUPPORT FILES
+# Support Files
 
 ## root
 
