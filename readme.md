@@ -59,7 +59,7 @@ The required python libraries are listed in the "requirements.txt" file. Those c
 
 `pip install -r requirements.txt`
 
-If for some reason an error occurs with one package, the following command will allow you to install the subsequent packages in the list:
+**If for some reason an error occurs with one package, the following command will allow you to install the subsequent packages in the list:**
 
 - On Mac/Linux:
   `while read package; do
@@ -67,9 +67,13 @@ If for some reason an error occurs with one package, the following command will 
 done < requirements.txt`
 
 - On Windows:
-  `Get-Content requirements.txt | ForEach-Object {
-    pip install $_ || Write-Error "Failed to install $_"}`
-  `for /f %i in (requirements.txt) do pip install %i`
+   - if using PowerShell 7 
+     `Get-Content requirements.txt | ForEach-Object {
+       pip install $_ || Write-Error "Failed to install $_"}`
+   - if using command prompt
+     `for /f %i in (requirements.txt) do pip install %i`
+     
+**We do not provide support for windows users utilizing PowerShell 5.**
 
 # Data Download
 
